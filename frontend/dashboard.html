@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Study Planner - Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background: #f5f6fa; margin: 0; }
+    .container { max-width: 1000px; margin: 40px auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+    h1 { text-align: center; color: #2f3640; margin-bottom: 30px; }
+    .day-card { border: 1px solid #dcdde1; border-radius: 8px; padding: 15px; margin-bottom: 20px; background: #fefefe; }
+    .day-card h3 { margin-top: 0; color: #0097e6; }
+    .session { border-left: 4px solid #0097e6; padding-left: 10px; margin: 8px 0; background: #f1f2f6; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; }
+    .session.high { border-color: #e84118; background: #ffe6e6; }
+    .session.medium { border-color: #fbc531; background: #fff8e6; }
+    .session.low { border-color: #44bd32; background: #e6ffe6; }
+    .session span { font-weight: bold; }
+    .button-container { text-align: center; margin-top: 20px; }
+    button { background: #0097e6; color: #fff; padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; margin: 5px; }
+    button:hover { background: #00a8ff; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>AI Study Planner Dashboard</h1>
+    <div id="planContainer"></div>
+    <div class="button-container">
+      <button id="regeneratePlan">♻️ Regenerate Plan</button>
+      <button id="downloadPlan">📥 Download Plan (CSV)</button>
+    </div>
+    <p id="message"></p>
+  </div>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>

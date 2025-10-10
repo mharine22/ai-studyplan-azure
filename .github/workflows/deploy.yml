@@ -1,0 +1,69 @@
+name: Deploy AI Study Planner
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      # Step 3: Install backend dependencies
+      - name: Install Backend Dependencies
+        run: |
+          if [ -f "backend/package.json" ]; then
+            cd backend
+            npm install --production
+          else
+            echo "No backend package.json found, skipping npm install."
+          fi
+
+      # Step 4: Build Frontend
+      - name: Build Frontend
+        run: |
+          if [ -f "frontend/package.json" ]; then
+            cd frontend
+            npm run build || echo "No build script found, skipping build."
+          else
+            echo "No frontend build needed."
+          fi
+
+      # Step 5: Deploy Frontend to Azure Static Web App
+      - name: Deploy Frontend
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          action: "upload"
+          app_location: "frontend"
+          api_location: "backend"
+          output_location: "build"
+
+      # Step 6: Azure Login (if needed for Functions)
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      # Step 7: Setup Azure Functions Core Tools
+      - name: Setup Azure Functions Core Tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y azure-functions-core-tools-4
+
+      # Step 8: Deploy Backend Functions
+      - name: Deploy Backend Functions
+        run: |
+          cd backend
+          func azure functionapp publish func-ai-studyplan --javascript

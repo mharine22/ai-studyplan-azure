@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Study Planner - Input Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f9fc;
+      padding: 20px;
+    }
+    h1 {
+      color: #333;
+      text-align: center;
+    }
+    form {
+      background: #fff;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+    .subject {
+      border: 1px solid #ddd;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      position: relative;
+    }
+    .remove-btn {
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    #message {
+      text-align: center;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>AI Study Planner - Input Form</h1>
+  <form id="studyForm">
+    <label>Email:</label>
+    <input type="email" id="email" required placeholder="Enter your email" />
+
+    <h3>Subjects</h3>
+    <div id="subjects"></div>
+    <button type="button" id="addSubjectBtn">+ Add Subject</button>
+
+    <h3>Availability</h3>
+    <label>Weekdays (hours/day):</label>
+    <input type="number" id="weekdays" min="1" required />
+
+    <label>Weekends (hours/day):</label>
+    <input type="number" id="weekends" min="1" required />
+
+    <label>Exceptions (comma-separated YYYY-MM-DD):</label>
+    <input type="text" id="exceptions" placeholder="2025-10-12,2025-10-20" />
+
+    <button type="submit">✨ Generate AI Plan</button>
+  </form>
+
+  <div id="message"></div>
+   <script>
+  window.__env = {
+    HF_TOKEN: "__YOUR_HUGGING_FACE_TOKEN__",  // ← Replace this with your Hugging Face token
+    HF_MODEL: "google/flan-t5-large"
+  };
+</script>
+
+  <script src="form.js"></script>
+</body>
+</html>

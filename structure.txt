@@ -1,0 +1,173 @@
+ai-studyplan/
+├── frontend/                 
+│   ├── index.html
+│   ├── style.css
+│   └── app.js
+├── backend/
+│   ├── host.json
+│   ├── local.settings.json
+│   └── HttpTriggerGeneratePlan/
+│       ├── __init__.py
+│       └── function.json
+├── terraform/                
+│   └── main.tf
+└── .github/workflows/
+    └── deploy.yml
+
+
+ai-studyplan/
+├── frontend/                 
+│   ├── index.html            # Main page (login/register OR dashboard)
+│   ├── form.html             # Student input form
+│   ├── dashboard.html        # Shows generated study plan
+│   ├── style.css             # Common styling
+│   ├── app.js                # Handles login + API calls
+│   ├── form.js               # Handles student input form
+│   └── dashboard.js          # Handles displaying/editing plans
+│
+├── backend/
+│   ├── host.json
+│   ├── local.settings.json
+│   └── HttpTriggerGeneratePlan/
+│       ├── __init__.py       # Azure Function logic (mock AI → later AI/ML)
+│       └── function.json
+│
+├── terraform/                
+│   └── main.tf               # Infra as Code (Static Web App, Functions, DB, Blob, etc.)
+│
+└── .github/workflows/
+    └── deploy.yml            # CI/CD pipeline (GitHub → Azure)
+
+
+ai-studyplan/
+├── frontend/
+│   ├── auth.html          # login / signup / logout (MSAL.js + fallback mock)
+│   ├── form.html          # subject input + uploads
+│   ├── dashboard.html     # Notion-style plan board (draggable)
+│   ├── css/
+│   │   └── style.css
+│   ├── js/
+│   │   ├── auth.js
+│   │   ├── form.js
+│   │   └── dashboard.js
+│   └── assets/
+├── backend/
+│   ├── host.json
+│   ├── local.settings.json
+│   └── HttpTriggerGeneratePlan/
+│       ├── __init__.py    # planner function (we already replaced with dynamic version)
+│       └── function.json
+├── terraform/
+│   ├── main.tf
+│   └── variables.tf
+└── .github/workflows/
+    └── deploy.yml
+
+
+ai-studyplan/
+├── frontend/                 
+│   ├── index.html           # Login / Signup page
+│   ├── form.html            # Student input form
+│   ├── dashboard.html       # Notion-style plan board
+│   ├── style.css            # Common styling
+│   ├── app.js               # Handles login + auth
+│   ├── form.js              # Handles student input form + validation
+│   └── dashboard.js         # Handles displaying / editing plans
+│
+├── backend/
+│   ├── host.json
+│   ├── local.settings.json
+│   └── HttpTriggerGeneratePlan/
+│       ├── __init__.py      # Azure Function logic (deterministic + AI-ready)
+│       └── function.json
+│
+├── terraform/                
+│   ├── main.tf               # Infra as Code (Azure Static Web App, Functions, DB, Blob)
+│   └── variables.tf
+│
+└── .github/workflows/
+    └── deploy.yml            # CI/CD pipeline (GitHub → Azure)
+
+
+ai-studyplan/
+├── frontend/                 
+│   ├── index.html           # Login / Signup page
+│   ├── form.html            # Student input form
+│   ├── dashboard.html       # Notion-style plan board
+│   ├── style.css            # Common styling
+│   ├── auth.js              # Handles signup + login (calls backend)
+│   ├── form.js              # Handles student input form + validation
+│   └── dashboard.js         # Handles displaying / editing plans
+│
+├── backend/
+│   ├── host.json
+│   ├── local.settings.json
+│   ├── Signup/
+│   │   ├── index.js         # Azure Function for signup
+│   │   └── function.json
+│   ├── Login/
+│   │   ├── index.js         # Azure Function for login
+│   │   └── function.json
+│   └── HttpTriggerGeneratePlan/
+│       ├── index.js         # Deterministic + AI-ready plan generator
+│       └── function.json
+│
+├── terraform/                
+│   ├── main.tf               # Infra as Code (Azure Static Web App, Functions, DB, Blob)
+│   └── variables.tf
+│
+└── .github/workflows/
+    └── deploy.yml            # CI/CD pipeline (GitHub → Azure)
+
+
+ai-studyplan/
+│.gitignore
+├── frontend/
+│   ├── app.js
+│   ├── auth.js                  # Likely handles signup + login (calls backend)
+│   ├── dashboard.html             # Plan/main display page
+│   ├── dashboard.js               # Likely handles displaying / editing plans
+│   ├── form.html                  # Student input form
+│   ├── form.js                    # Likely handles student input form + validation
+│   ├── index.html                 # Main/landing page (potentially login/signup)
+│   └── style.css  
+│    ├── env.js                 # Common styling
+│
+├── backend/
+│   ├── host.json
+│   ├── local.settings.json
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── node_modules/              # Dependencies
+│   ├── HttpTriggerGeneratePlan/
+│   │   ├── index.js               # Azure Function to generate the plan
+│   │   └── function.json
+│   ├── Login/
+│   │   ├── index.js               # Azure Function for login
+│   │   └── function.json
+│   ├── Signup/
+│   │   ├── index.js               # Azure Function for signup
+│   │   └── function.json
+│   ├── SubmitPlanInput/
+│   │   ├── index.js               # Azure Function to submit student input
+│   │   └── function.json
+│   └── UploadNotes/
+│       ├── index.js               # Azure Function to handle note uploads
+│       └── function.json
+│
+├── terraform/
+│   ├── main.tf                    # Infrastructure as Code definition
+│   └── variables.tf
+│   └── outputs.tf
+│
+├── .github/workflows/
+│   └── deploy.yml                 # CI/CD deployment workflow
+│
+└── azurite/                       # Local Azure Function/Storage emulator files
+
+*23*->error free //github action deploy
+
+
+
+
+

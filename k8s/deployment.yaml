@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai-studyplan-backend
+  labels:
+    app: ai-studyplan-backend
+spec:
+  replicas: 2  # number of pods
+  selector:
+    matchLabels:
+      app: ai-studyplan-backend
+  template:
+    metadata:
+      labels:
+        app: ai-studyplan-backend
+    spec:
+      containers:
+      - name: backend
+        image: aistudyplanacr.azurecr.io/ai-studyplan-backend:latest
+        ports:
+        - containerPort: 80
+        env:
+        - name: FUNCTIONS_WORKER_RUNTIME
+          value: node

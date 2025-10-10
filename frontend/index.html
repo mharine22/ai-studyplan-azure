@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Study Planner</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Page Background */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+    }
+
+    /* Container Card */
+    .auth-container {
+      background-color: #fff;
+      width: 380px;
+      padding: 40px 30px;
+      border-radius: 15px;
+      box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+      text-align: center;
+      position: relative;
+    }
+
+    h1 {
+      color: #764ba2;
+      margin-bottom: 25px;
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 30px;
+    }
+
+    .tabs button {
+      padding: 10px 25px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      color: #888;
+      border-bottom: 2px solid transparent;
+      transition: 0.3s;
+      font-size: 16px;
+    }
+
+    .tabs button.active {
+      color: #764ba2;
+      border-color: #764ba2;
+    }
+
+    /* Forms */
+    .form {
+      display: none;
+      flex-direction: column;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .form.active {
+      display: flex;
+    }
+
+    input {
+      margin: 10px 0;
+      padding: 12px;
+      font-size: 14px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    input:focus {
+      border-color: #764ba2;
+      box-shadow: 0 0 5px rgba(118,75,162,0.5);
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 12px;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      background-color: #764ba2;
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #667eea;
+    }
+
+    #message {
+      margin-top: 15px;
+      font-weight: bold;
+      color: red;
+      min-height: 20px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="auth-container">
+    <h1>AI Study Planner</h1>
+    <div class="tabs">
+      <button id="loginTab" class="active">Login</button>
+      <button id="signupTab">Sign Up</button>
+    </div>
+
+    <!-- Login Form -->
+    <div id="loginForm" class="form active">
+      <input type="email" id="loginEmail" placeholder="Email" />
+      <input type="password" id="loginPassword" placeholder="Password" />
+      <button onclick="login()">Login</button>
+    </div>
+
+    <!-- Signup Form -->
+    <div id="signupForm" class="form">
+      <input type="text" id="signupName" placeholder="Name" />
+      <input type="email" id="signupEmail" placeholder="Email" />
+      <input type="password" id="signupPassword" placeholder="Password" />
+      <button onclick="signup()">Sign Up</button>
+    </div>
+
+    <!-- Forgot Password Form -->
+    <div id="forgotForm" class="form">
+      <input type="email" id="forgotEmail" placeholder="Email" />
+      <button id="forgotSubmit">Reset Password</button>
+      <button id="backToLogin">Back to Login</button>
+    </div>
+
+    <p id="message"></p>
+  </div>
+
+<script src="env.js"></script>
+<script src="auth.js"></script>
+<script>
+  // Tab toggle
+  const loginTab = document.getElementById("loginTab");
+  const signupTab = document.getElementById("signupTab");
+  const loginForm = document.getElementById("loginForm");
+  const signupForm = document.getElementById("signupForm");
+  const forgotForm = document.getElementById("forgotForm");
+  const message = document.getElementById("message");
+
+  loginTab.addEventListener("click", () => {
+    loginTab.classList.add("active");
+    signupTab.classList.remove("active");
+    loginForm.classList.add("active");
+    signupForm.classList.remove("active");
+    forgotForm.classList.remove("active");
+    message.innerText = "";
+  });
+
+  signupTab.addEventListener("click", () => {
+    signupTab.classList.add("active");
+    loginTab.classList.remove("active");
+    signupForm.classList.add("active");
+    loginForm.classList.remove("active");
+    forgotForm.classList.remove("active");
+    message.innerText = "";
+  });
+
+  document.getElementById("backToLogin").addEventListener("click", () => {
+    loginTab.click();
+  });
+
+  document.getElementById("forgotSubmit").addEventListener("click", () => {
+    const email = document.getElementById("forgotEmail").value.trim();
+    const users = JSON.parse(localStorage.getItem("users") || "[]");
+    const user = users.find(u => u.email === email);
+    if (user) {
+      alert(`Password reset link sent to ${email} (mock)`); 
+      loginTab.click();
+    } else {
+      alert("Email not found!");
+    }
+  });
+</script>
+</body>
+</html>

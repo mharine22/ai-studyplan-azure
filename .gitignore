@@ -1,0 +1,35 @@
+@'
+# Node / JS
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Local Azure Functions settings (do not commit secrets)
+backend/local.settings.json
+*.secret
+.env
+
+# OS + Editor files
+.DS_Store
+.vscode/
+Thumbs.db
+
+# Azurite
+azurite/
+
+#frontend/env.js
+importantdetails.txt
+
+
+
+#.terraform/
+#*.tfstate
+#*.tfstate.*
+#.terraform.lock.hcl
+
+
+# other
+dist/
+'@ | Out-File -Encoding UTF8 .gitignore
+
+
