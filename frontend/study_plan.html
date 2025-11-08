@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>📚 Your Personalized Study Plan</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            'primary-dark': '#1e3a8a',
+            'primary-light': '#3b82f6',
+            'accent-green': '#10b981',
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    .glass-container {
+      background-color: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .scrollable-content::-webkit-scrollbar {
+      width: 8px;
+    }
+    .scrollable-content::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-gray-900 flex items-center justify-center p-4 sm:p-8 font-sans"
+  style="background-image: linear-gradient(135deg, #0f172a 0%, #1e3a8a 70%, #4f46e5 100%);">
+
+  <div class="w-full max-w-5xl glass-container rounded-3xl shadow-2xl p-6 sm:p-10 text-white overflow-y-auto max-h-[95vh] scrollable-content">
+    <h1 class="text-4xl font-extrabold text-white text-center mb-10 tracking-wide">
+      <span class="bg-gradient-to-r from-cyan-400 to-primary-light bg-clip-text text-transparent">
+        📚 Your AI Study Plan
+      </span>
+    </h1>
+
+    <div id="planContent" class="space-y-8 text-white">
+      <div class="text-center py-10">Loading plan...</div>
+    </div>
+
+    <div class="flex justify-center mt-10">
+      <button id="backBtn"
+        class="px-8 py-3 bg-cyan-500 hover:bg-cyan-600 active:scale-95 text-white font-semibold rounded-xl shadow-xl shadow-cyan-500/30 transition-all duration-300 ease-in-out flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M9.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L7.414 9H15a1 1 0 110 2H7.414l2.293 2.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+        </svg>
+        <span>Back to Planner</span>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    function parsePlanToHtml(planText) {
+      if (!planText) return "<p class='text-center text-yellow-300'>⚠️ No study plan available.</p>";
+
+      const cleanText = planText
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+
+      // 🧩 If no day headings found, show as summary
+      if (!cleanText.match(/Day\s*\d+/i)) {
+        return `
+          <div class="bg-white/10 glass-container rounded-2xl p-6 shadow-xl border-l-4 border-primary-light">
+            <h2 class="text-2xl font-semibold mb-4 border-b border-white/20 pb-2">📆 Weekly Study Plan Overview</h2>
+            <p class="text-gray-200 leading-relaxed whitespace-pre-line">${cleanText}</p>
+          </div>`;
+      }
+
+      const lines = cleanText.split('\n').map(l => l.trim()).filter(Boolean);
+      let html = '';
+      let overview = '';
+      let dailyPlans = [];
+      let inDailySection = false;
+      let dayTitle = '';
+      let dayContent = '';
+
+      const renderDayCard = (title, content) => {
+        const sessionLines = content.split('\n').map(l => l.trim()).filter(l =>
+          l.startsWith('*') || /^\d+\./.test(l)
+        );
+
+        if (sessionLines.length === 0) {
+          return `
+            <div class="bg-white/10 glass-container rounded-2xl shadow-xl p-6">
+              <h3 class="text-2xl font-bold text-cyan-300 mb-3">${title}</h3>
+              <p class="text-gray-400 italic">No detailed sessions found for this day.</p>
+            </div>`;
+        }
+
+        let sessionHtml = '';
+        let currentSession = {};
+        let sessionCounter = 0;
+
+        const makeSessionHTML = (session, index) => `
+          ${index > 1 ? '<div class="my-4 border-t border-gray-100"></div>' : ''}
+          <div class="relative pl-6 border-l-2 border-primary-light/50 hover:border-accent-green transition-colors duration-300 group">
+            <span class="absolute -left-1.5 top-3 h-3 w-3 rounded-full bg-primary-light group-hover:bg-accent-green"></span>
+            ${session.timeBlock ? `<p class="text-sm text-cyan-300 font-medium">${session.timeBlock}</p>` : ''}
+            ${session.subject ? `<p class="text-lg font-bold text-white mt-1">${session.subject}</p>` : ''}
+            ${session.topic ? `<p class="text-sm text-gray-300">${session.topic}</p>` : ''}
+            ${session.duration ? `<p class="text-xs text-gray-400">${session.duration}</p>` : ''}
+          </div>`;
+
+        for (const line of sessionLines) {
+          const cleanLine = line.replace(/^(\*|\d+\.)\s*/, '').trim();
+
+          if (/^(Time Block|Subject|Topic\/Action|Duration):/i.test(cleanLine)) {
+            const match = cleanLine.match(/^(Time Block|Subject|Topic\/Action|Duration):\s*(.*)/i);
+            if (match) {
+              const key = match[1].toLowerCase().replace('/', '');
+              const value = match[2].trim();
+              if (key.includes('time block')) currentSession.timeBlock = value;
+              if (key.includes('subject')) currentSession.subject = value;
+              if (key.includes('topicaction')) currentSession.topic = value;
+              if (key.includes('duration')) currentSession.duration = value;
+              if (currentSession.timeBlock && currentSession.subject && currentSession.topic && currentSession.duration) {
+                sessionCounter++;
+                sessionHtml += makeSessionHTML(currentSession, sessionCounter);
+                currentSession = {};
+              }
+            }
+          } else {
+            // fallback for numbered/bullet sentences like “1. 9 AM – 11 AM: Study Java”
+            sessionCounter++;
+            sessionHtml += `
+              ${sessionCounter > 1 ? '<div class="my-4 border-t border-gray-100"></div>' : ''}
+              <div class="relative pl-6 border-l-2 border-primary-light/50 hover:border-accent-green transition-colors duration-300">
+                <span class="absolute -left-1.5 top-1 h-3 w-3 rounded-full bg-primary-light ring-4 ring-white"></span>
+                <p class="text-gray-100">${cleanLine}</p>
+              </div>`;
+          }
+        }
+
+        return `
+          <div class="bg-white/10 glass-container rounded-2xl shadow-xl p-6">
+            <h3 class="text-2xl font-bold text-cyan-300 mb-3">${title}</h3>
+            ${sessionHtml}
+          </div>`;
+      };
+
+      for (const line of lines) {
+        if (line.includes("Weekly Study Plan Overview") && !inDailySection) continue;
+        if (line.match(/^###\s*Day|^Day\s*\d+/i)) {
+          if (dayTitle) dailyPlans.push(renderDayCard(dayTitle, dayContent));
+          dayTitle = line;
+          dayContent = '';
+          inDailySection = true;
+        } else if (inDailySection) {
+          dayContent += line + '\n';
+        } else {
+          overview += line + ' ';
+        }
+      }
+      if (dayTitle) dailyPlans.push(renderDayCard(dayTitle, dayContent));
+
+      html += `
+        <div class="bg-white/10 glass-container rounded-2xl p-6 shadow-xl border-l-4 border-primary-light">
+          <h2 class="text-2xl font-semibold mb-3 border-b border-white/20 pb-2">📆 Weekly Study Plan Overview</h2>
+          <p class="text-gray-200 leading-relaxed">${overview}</p>
+        </div>
+        <h2 class="text-3xl font-bold text-center text-white pt-6 pb-4">Daily Schedule</h2>
+        <div class="space-y-8">${dailyPlans.join('')}</div>`;
+
+      return html;
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const planContent = document.getElementById("planContent");
+      const backBtn = document.getElementById("backBtn");
+
+      const stored = localStorage.getItem("generatedStudyPlan");
+      let plan = "No plan found.";
+
+      if (stored) {
+        try {
+          const parsed = JSON.parse(stored);
+          plan = parsed.plan || parsed.content || parsed.text || stored;
+        } catch {
+          plan = stored;
+        }
+      }
+
+      planContent.innerHTML = parsePlanToHtml(plan);
+
+      backBtn.addEventListener("click", () => {
+        window.location.href = "form.html";
+      });
+    });
+  </script>
+</body>
+</html>

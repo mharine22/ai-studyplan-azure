@@ -170,4 +170,136 @@ ai-studyplan/
 
 
 
+ai-studyplan/
+│.gitignore
+├── frontend/
+│   ├── app.js
+│   ├── auth.js                  # Likely handles signup + login (calls backend)
+│   ├── dashboard.html             # Plan/main display page
+│   ├── dashboard.js               # Likely handles displaying / editing plans
+│   ├── form.html                  # Student input form
+│   ├── form.js                    # Likely handles student input form + validation
+│   ├── index.html                 # Main/landing page (potentially login/signup)
+│   └── style.css  
+│    ├── env.js                 # Common styling
+│
+├── backend/
+│   ├── host.json
+│   ├── local.settings.json
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── node_modules/   
+|    ├── GenerateStudyPlan/
+│   ├── index.js
+│   └── function.json           # Dependencies
+│   ├── HttpTriggerGeneratePlan/
+│   │   ├── index.js               # Azure Function to generate the plan
+│   │   └── function.json
+│   ├── Login/
+│   │   ├── index.js               # Azure Function for login
+│   │   └── function.json
+│   ├── Signup/
+│   │   ├── index.js               # Azure Function for signup
+│   │   └── function.json
+│   ├── SubmitPlanInput/
+│   │   ├── index.js               # Azure Function to submit student input
+│   │   └── function.json
+│   └── UploadNotes/
+│       ├── index.js               # Azure Function to handle note uploads
+│       └── function.json
+│
 
+├── .github/workflows/
+│   └── deploy.yml                 # CI/CD deployment workflow
+│
+└── azurite/                       # Local Azure Function/Storage emulator files
+
+
+AI-STUDYPLAN/
+├── .github/
+│   └── workflows/
+│       └── deploy.yml
+├── .vscode/
+│   └── (content hidden)
+├── .gitignore
+├── azure/
+│   └── vicode
+├── backend/
+│   ├── GenerateStudyPlan/
+│   │   ├── function.json
+│   │   └── index.js
+│   ├── Login/
+│   │   ├── function.json
+│   │   └── index.js
+│   ├── Signup/
+│   │   ├── function.json
+│   │   └── index.js
+│   ├── SubmitPlanInput/
+│   │   ├── function.json
+│   │   └── index.js
+│   ├── UploadNotes/
+│   │   ├── function.json
+│   │   └── index.js
+│   ├── node_modules/
+│   ├── .dockerignore
+│   ├── Dockerfile
+│   ├── host.json
+│   ├── local.settings.json
+│   ├── package-lock.json
+│   └── package.json
+└── frontend/
+    ├── app.js
+    ├── auth.js
+    ├── env.js
+    ├── form.html
+    ├── index.html
+    ├── index.js
+    ├── style.css
+    ├── k8s/
+    ├── node_modules/
+    ├── .gitignore
+    ├── package-lock.json
+    ├── package.json
+    └── structure.txt
+
+
+
+    frontend/
+│
+├── src/
+│   ├── App.js
+│   ├── index.js
+│   ├── pages/
+│   │   ├── Dashboard.js
+│   │   ├── FormPage.js
+│   │   └── StudyPlanPage.js
+│   └── components/
+│       └── Navbar.js
+│
+├── index.html
+├── package.json
+├── webpack.config.js
+└── style.css
+
+
+frontend/
+│
+├── public/
+│   └── index.html
+│
+├── src/
+│   ├── App.js
+│   ├── index.js
+│   ├── pages/
+│   │   ├── Dashboard.js         ← (optional future page)
+│   │   ├── FormPage.js          ← your “form.html” + “form.js”
+│   │   └── StudyPlanPage.js     ← your “study_plan.html” script
+│   │
+│   └── components/
+│       ├── Navbar.js
+│       └── AuthPage.js          ← your login/signup UI (from “study_plan.html”)
+│
+├── env.js                       ← keep your window.env config here
+├── style.css
+├── package.json
+└── webpack.config.js

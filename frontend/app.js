@@ -1,92 +1,38 @@
-// --- Tab Switching ---
 const loginTab = document.getElementById("loginTab");
 const signupTab = document.getElementById("signupTab");
-
 const loginForm = document.getElementById("loginForm");
 const signupForm = document.getElementById("signupForm");
 const forgotForm = document.getElementById("forgotForm");
-
 const message = document.getElementById("message");
 
-loginTab.addEventListener("click", () => switchForm("login"));
-signupTab.addEventListener("click", () => switchForm("signup"));
-
-function switchForm(form) {
-    loginForm.classList.remove("active");
-    signupForm.classList.remove("active");
-    forgotForm.classList.remove("active");
-    loginTab.classList.remove("active");
-    signupTab.classList.remove("active");
-
-    if (form === "login") {
-        loginForm.classList.add("active");
-        loginTab.classList.add("active");
-    } else if (form === "signup") {
-        signupForm.classList.add("active");
-        signupTab.classList.add("active");
-    }
-}
-
-// --- Forgot Password Flow ---
-document.getElementById("forgotPasswordLink").addEventListener("click", e => {
-    e.preventDefault();
-    loginForm.classList.remove("active");
-    signupForm.classList.remove("active");
-    forgotForm.classList.add("active");
+loginTab.addEventListener("click", () => {
+  loginTab.classList.add("active");
+  signupTab.classList.remove("active");
+  loginForm.classList.add("active");
+  signupForm.classList.remove("active");
+  forgotForm.classList.remove("active");
+  message.innerText = "";
 });
 
-document.getElementById("backToLogin").addEventListener("click", e => {
-    e.preventDefault();
-    switchForm("login");
+signupTab.addEventListener("click", () => {
+  signupTab.classList.add("active");
+  loginTab.classList.remove("active");
+  signupForm.classList.add("active");
+  loginForm.classList.remove("active");
+  forgotForm.classList.remove("active");
+  message.innerText = "";
 });
 
-// --- Signup ---
-signupForm.addEventListener("submit", e => {
-    e.preventDefault();
-    const name = document.getElementById("signupName").value.trim();
-    const email = document.getElementById("signupEmail").value.trim();
-    const password = document.getElementById("signupPassword").value.trim();
-
-    const users = JSON.parse(localStorage.getItem("users") || "[]");
-    if (users.some(u => u.email === email)) {
-        alert("Email already registered. Try logging in!");
-        return;
-    }
-
-    users.push({ name, email, password });
-    localStorage.setItem("users", JSON.stringify(users));
-    alert("Signup successful! Please login.");
-    switchForm("login");
+document.getElementById("backToLogin").addEventListener("click", () => {
+  loginTab.click();
 });
 
-// --- Login ---
-loginForm.addEventListener("submit", e => {
-    e.preventDefault();
-    const email = document.getElementById("loginEmail").value.trim();
-    const password = document.getElementById("loginPassword").value.trim();
-
-    const users = JSON.parse(localStorage.getItem("users") || "[]");
-    const user = users.find(u => u.email === email && u.password === password);
-
-    if (user) {
-        localStorage.setItem("userEmail", user.email);
-        window.location.href = "form.html"; // redirect to study planner form
-    } else {
-        alert("Invalid email or password!");
-    }
-});
-
-// --- Forgot Password ---
-forgotForm.addEventListener("submit", e => {
-    e.preventDefault();
-    const email = document.getElementById("forgotEmail").value.trim();
-    const users = JSON.parse(localStorage.getItem("users") || "[]");
-    const user = users.find(u => u.email === email);
-
-    if (user) {
-        alert(`Password reset link sent to ${email} (mock)`);
-        switchForm("login");
-    } else {
-        alert("Email not found!");
-    }
+document.getElementById("forgotSubmit").addEventListener("click", () => {
+  const email = document.getElementById("forgotEmail").value.trim();
+  if (email) {
+    alert(`Password reset link sent to ${email} (mock)`); 
+    loginTab.click();
+  } else {
+    alert("Enter your email first!");
+  }
 });

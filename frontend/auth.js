@@ -1,63 +1,80 @@
 // --- API Base URL (from env.js) ---
 const API_BASE = window.__env.API_BASE;
 
-// --- Signup ---
+// --- Signup Function ---
 async function signup() {
   const name = document.getElementById("signupName").value.trim();
   const email = document.getElementById("signupEmail").value.trim();
   const password = document.getElementById("signupPassword").value.trim();
-  const messageEl = document.getElementById("message");
+  const message = document.getElementById("message");
+
+  message.innerText = "";
 
   if (!name || !email || !password) {
-    messageEl.innerText = "Please fill all fields.";
+    message.innerText = "Please fill all fields.";
     return;
   }
 
   try {
-    const res = await fetch(`${API_BASE}/signup`, {
+    const res = await fetch(`${window.API_BASE_URL}/signup`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password })
     });
 
     const data = await res.json();
+
     if (res.ok) {
-      alert("Signup successful!");
-      window.location.href = "form.html";
+       message.style.color = "green";
+      message.innerText = data.message || "Signup successful!";
+      setTimeout(() => {
+        document.getElementById("loginTab").click();
+      }, 1500);
     } else {
-      messageEl.innerText = data.error || "Signup failed!";
+      message.style.color = "red";
+      message.innerText = data.error || "Signup failed!";
     }
   } catch (err) {
-    messageEl.innerText = "Server error: " + err.message;
+    message.style.color = "red";
+    message.innerText = "Error: " + err.message;
   }
 }
 
-// --- Login ---
+// --- Login Function ---
 async function login() {
   const email = document.getElementById("loginEmail").value.trim();
   const password = document.getElementById("loginPassword").value.trim();
-  const messageEl = document.getElementById("message");
+  const message = document.getElementById("message");
+
+  message.innerText = "";
 
   if (!email || !password) {
-    messageEl.innerText = "Please enter email and password.";
+    message.innerText = "Please enter email and password.";
     return;
   }
 
   try {
-    const res = await fetch(`${API_BASE}/login`, {
+    const res = await fetch(`${window.env.API_BASE_URL}/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password })
     });
 
     const data = await res.json();
+
     if (res.ok) {
+      message.style.color = "green";
+      message.innerText = data.message || "Login successful!";
       localStorage.setItem("userEmail", email);
-      window.location.href = "form.html";
+      setTimeout(() => {
+        window.location.href = "form.html"; // redirect after login
+      }, 1500);// redirect after login
     } else {
-      messageEl.innerText = data.error || "Login failed!";
+      message.style.color = "red";
+      message.innerText = data.error || "Invalid email or password.";
     }
   } catch (err) {
-    messageEl.innerText = "Server error: " + err.message;
+    message.style.color = "red";
+    message.innerText = "Server error: " + err.message;
   }
 }

@@ -1,109 +1,157 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Study Planner - Input Form</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f7f9fc;
-      padding: 20px;
-    }
-    h1 {
-      color: #333;
-      text-align: center;
-    }
-    form {
-      background: #fff;
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    }
-    .subject {
-      border: 1px solid #ddd;
-      padding: 15px;
-      border-radius: 8px;
-      margin-bottom: 15px;
-      position: relative;
-    }
-    .remove-btn {
-      background: #dc3545;
-      color: white;
-      border: none;
-      padding: 5px 10px;
-      border-radius: 4px;
-      cursor: pointer;
-      position: absolute;
-      top: 10px;
-      right: 10px;
-    }
-    label {
-      display: block;
-      margin-top: 10px;
-      font-weight: bold;
-    }
-    input, select {
-      width: 100%;
-      padding: 8px;
-      margin-top: 5px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-    button {
-      display: block;
-      margin: 20px auto;
-      padding: 10px 20px;
-      font-size: 16px;
-      border: none;
-      background-color: #007bff;
-      color: white;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-    #message {
-      text-align: center;
-      margin-top: 15px;
-      font-weight: bold;
-    }
-  </style>
-</head>
-<body>
-  <h1>AI Study Planner - Input Form</h1>
-  <form id="studyForm">
-    <label>Email:</label>
-    <input type="email" id="email" required placeholder="Enter your email" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Study Planner - Input Form</title>
 
-    <h3>Subjects</h3>
-    <div id="subjects"></div>
-    <button type="button" id="addSubjectBtn">+ Add Subject</button>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
 
-    <h3>Availability</h3>
-    <label>Weekdays (hours/day):</label>
-    <input type="number" id="weekdays" min="1" required />
+    <style>
+      #generatedPlan {
+        white-space: pre-wrap;
+      }
+      .remove-btn {
+        cursor: pointer;
+      }
+    </style>
+  </head>
 
-    <label>Weekends (hours/day):</label>
-    <input type="number" id="weekends" min="1" required />
+  <body class="bg-gray-50 min-h-screen p-4 sm:p-8 font-sans">
+    <!-- Header -->
+    <h1 class="text-4xl font-extrabold text-blue-700 text-center mb-8">
+      🧠 AI Study Planner
+    </h1>
 
-    <label>Exceptions (comma-separated YYYY-MM-DD):</label>
-    <input type="text" id="exceptions" placeholder="2025-10-12,2025-10-20" />
+    <!-- Form Container -->
+    <form
+      id="studyForm"
+      class="max-w-xl mx-auto p-6 bg-white rounded-2xl shadow-2xl transition-all duration-300"
+    >
+      <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">
+        Plan Your Session
+      </h2>
 
-    <button type="submit">✨ Generate AI Plan</button>
-  </form>
+      <!-- Email -->
+      <label for="email" class="block mt-4 mb-1 font-semibold text-gray-700"
+        >Email:</label
+      >
+      <input
+        type="email"
+        id="email"
+        required
+        placeholder="Enter your email"
+        class="w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition"
+      />
 
-  <div id="message"></div>
-   <script>
-  window.__env = {
-    HF_TOKEN: "__YOUR_HUGGING_FACE_TOKEN__",  // ← Replace this with your Hugging Face token
-    HF_MODEL: "google/flan-t5-large"
-  };
-</script>
+      <!-- Subjects -->
+      <h3 class="text-xl font-bold text-gray-800 mt-6 mb-3">Subjects</h3>
+      <div id="subjects"></div>
+      <button
+        type="button"
+        id="addSubjectBtn"
+        class="w-full mt-4 py-2 px-4 text-sm font-medium border border-blue-500 text-blue-500 rounded-lg hover:bg-blue-50 transition"
+      >
+        + Add Subject
+      </button>
 
-  <script src="form.js"></script>
-</body>
+      <!-- Availability -->
+      <h3 class="text-xl font-bold text-gray-800 mt-6 mb-3">Availability</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label for="weekdays" class="block mb-1 font-semibold text-gray-700"
+            >Weekdays (hours/day):</label
+          >
+          <input
+            type="number"
+            id="weekdays"
+            min="1"
+            required
+            class="w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition"
+          />
+        </div>
+        <div>
+          <label for="weekends" class="block mb-1 font-semibold text-gray-700"
+            >Weekends (hours/day):</label
+          >
+          <input
+            type="number"
+            id="weekends"
+            min="1"
+            required
+            class="w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition"
+          />
+        </div>
+      </div>
+
+      <!-- Exceptions -->
+      <label
+        for="exceptions"
+        class="block mt-4 mb-1 font-semibold text-gray-700"
+      >
+        Exceptions (comma-separated YYYY-MM-DD):
+      </label>
+      <input
+        type="text"
+        id="exceptions"
+        placeholder="2025-10-12, 2025-10-20"
+        class="w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition"
+      />
+
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        id="submitBtn" 
+        
+        class="w-2/3 mx-auto mt-8 py-3 font-bold text-lg bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition shadow-lg shadow-blue-300/50 block"
+      >
+        ✨ Generate AI Plan
+      </button>
+    </form>
+
+    <!-- View Plan Button -->
+    <div class="flex justify-center mt-6 max-w-xl mx-auto">
+      <button
+        type="button"
+        id="viewPlanBtn"
+        style="display: none;"
+        class="px-6 py-2 font-semibold text-blue-600 border border-blue-600 rounded-xl hover:bg-blue-50 transition"
+      >
+        View Study Plan
+      </button>
+    </div>
+
+    <!-- Message -->
+    <div
+      id="message"
+      class="text-center mt-6 font-bold text-lg max-w-xl mx-auto"
+    ></div>
+
+    <!-- Generated Plan Display -->
+    <pre
+      id="generatedPlan"
+      style="display: none;"
+      class="bg-blue-50 p-6 rounded-2xl border border-blue-200 max-w-xl mx-auto mt-8 shadow-inner overflow-x-auto text-sm text-gray-800"
+    ></pre>
+
+    <!-- Function App URL -->
+    <script>
+      window.FUNCTION_APP_URL =
+        "https://func-ai-studyplan-bggxb5cfafd7fbc6.centralindia-01.azurewebsites.net/api";
+    </script>
+
+    <script src="form.js"></script>
+  </body>
 </html>

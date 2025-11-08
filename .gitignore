@@ -11,7 +11,7 @@ backend/local.settings.json
 
 # OS + Editor files
 .DS_Store
-.vscode/
+
 Thumbs.db
 
 # Azurite
