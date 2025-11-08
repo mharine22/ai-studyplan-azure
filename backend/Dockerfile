@@ -1,24 +1,18 @@
-# Use official Node.js Azure Functions base image
-FROM mcr.microsoft.com/azure-functions/node:4-node18
+# Use the official Node.js image
+FROM node:18-alpine
 
 # Set working directory
-WORKDIR /home/site/wwwroot
+WORKDIR /app
 
-# Copy package files
+# Copy package files and install dependencies
 COPY package*.json ./
-
-# Install dependencies
 RUN npm install --only=production
 
-# Copy all backend code
+# Copy all backend files
 COPY . .
 
-# Set Azure Functions environment variables
-ENV AzureWebJobsScriptRoot=/home/site/wwwroot \
-    FUNCTIONS_WORKER_RUNTIME=node
-
-# Expose port (optional, Functions default is 80)
+# Expose port (Azure Functions default is 80)
 EXPOSE 80
 
-# Start Azure Functions
-CMD ["func", "start", "--javascript"]
+# Start the Node.js app (Azure Functions)
+CMD ["npx", "func", "start", "--javascript"]
